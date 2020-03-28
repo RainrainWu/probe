@@ -1,16 +1,15 @@
-package main
+package utils
 
 import (
-	"encoding/json"
-	"fmt"
+	"time"
 )
 
 type Metadata struct {
 	Id			string	`json:"id"`
-	Timestamp	string	`json:"timestamp"`
-	Environment	string	`json:"environment"`
+	Time		string	`json:"time"`
+	Env			string	`json:"env"`
 	Tester		string	`json:"tester"`
-	Description	string	`json:"description"`
+	Subject		string	`json:"subject"`
 }
 
 type Statistic struct {
@@ -20,14 +19,9 @@ type Statistic struct {
 	Fail	int
 }
 
-type Message struct {
-	Key		string
-	Value	string
-}
-
 type Detail struct {
 	Name	string
-	Content	[]Message
+	Content	map[string]string
 }
 
 type Report struct {
@@ -36,13 +30,43 @@ type Report struct {
 	Dets	[]Detail	`json:"dets"`
 }
 
+func (r *Report) SetMeta(id, env, tester, subject string) {
+	data := Metadata{
+		Id: 		id,
+		Time: 		string(time.Now().Unix()),
+		Env: 		env,
+		Tester:		tester,
+		Subject:	subject,
+	}
+	r.Meta = data
+}
+
+func (r *Report) Pass(detail Detail) {
+	r.Stat.Total += 1
+	r.Stat.Pass += 1
+	r.Dets = append(r.Dets, detail)
+}
+
+func (r *Report) Warning(detail Detail) {
+	r.Stat.Total += 1
+	r.Stat.Warning += 1
+	r.Dets = append(r.Dets, detail)
+}
+
+func (r *Report) Fail(detail Detail) {
+	r.Stat.Total += 1
+	r.Stat.Fail += 1
+	r.Dets = append(r.Dets, detail)
+}
+
+/*
 func main() {
 	me := Metadata{
 		Id: "001",
-		Timestamp: "002",
-		Environment: "dev",
+		Time: "002",
+		Env: "dev",
 		Tester: "CI",
-		Description: "none",
+		Subject: "none",
 	}
 	st := Statistic{
 		Total: 		3,
@@ -50,23 +74,18 @@ func main() {
 		Warning:	1,
 		Fail:		1,
 	}
-	ms1 := Message{
-		Key:	"token",
-		Value:	"12345",
-	}
-	ms2 := Message{
-		Key:	"code",
-		Value:	"200",
-	}
 	de := Detail{
 		Name:		"Auth",
-		Content:	[]Message{ms1, ms2},
+		Content:	map[string]string{
+			"token": "123456",
+			"code": "200",
+		},
 	}
 	re := &Report{
 		Meta:	me,
 		Stat:	st,
 		Dets:	[]Detail{de},
 	}
-	data, _ :=json.Marshal(re)
-	fmt.Println(string(data))
+	fmt.Println(re.Marshal())
 }
+*/

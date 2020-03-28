@@ -16,12 +16,12 @@ const (
 func main() {
 
 	server := gin.Default()
-	server.GET("/test", func(c *gin.Context) {
+	server.POST("/test", func(c *gin.Context) {
 		salad_runner := utils.Runner{
 			Series: 	test_salad.Cases,
 			LogLevel:	1,
 		}
-		salad_runner.Init()
+		salad_runner.Init("test_001", "dev", "rain", "first test")
 		go salad_runner.Start()
 		show(salad_runner)
 		c.JSON(200, []string{"123", "321"})
