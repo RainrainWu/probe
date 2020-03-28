@@ -25,11 +25,10 @@ func (r *Runner) Wrap(item func(*Runner) int) func(*sync.WaitGroup) int {
 	}
 }
 
-func (r *Runner) Init(id, env, tester, subject string) {
+func (r *Runner) Init() {
 
 	r.Logger = make(chan string)
 	r.Rep = new(Report)
-	r.Rep.SetMeta(id, env, tester, subject)
 	r.group = new(sync.WaitGroup)
 }
 

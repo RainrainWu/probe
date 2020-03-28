@@ -1,12 +1,7 @@
 package utils
 
-import (
-	"time"
-)
-
 type Metadata struct {
 	Id			string	`json:"id"`
-	Time		string	`json:"time"`
 	Env			string	`json:"env"`
 	Tester		string	`json:"tester"`
 	Subject		string	`json:"subject"`
@@ -30,14 +25,7 @@ type Report struct {
 	Dets	[]Detail	`json:"dets"`
 }
 
-func (r *Report) SetMeta(id, env, tester, subject string) {
-	data := Metadata{
-		Id: 		id,
-		Time: 		string(time.Now().Unix()),
-		Env: 		env,
-		Tester:		tester,
-		Subject:	subject,
-	}
+func (r *Report) SetMeta(data Metadata) {
 	r.Meta = data
 }
 
