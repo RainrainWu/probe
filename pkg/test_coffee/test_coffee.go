@@ -21,5 +21,6 @@ func Espresso(r *utils.Runner) int {
 	r.Debug("Prepare hot water")
 	r.Warning("Hot water is not hot enough")
 	r.Info("Finish making espresso")
+	r.Dump()
 	return 0
 }

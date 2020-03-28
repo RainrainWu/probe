@@ -20,5 +20,6 @@ func Caesar(r *utils.Runner) int {
 	r.Debug("Add topping")
 	r.Error("Topping not found")
 	r.Info("Finish making Caesar")
+	r.Dump()
 	return 0
 }

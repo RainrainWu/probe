@@ -3,28 +3,38 @@ package main
 import (
 	"fmt"
 
-	"github.com/RainrainWu/probe/pkg/test_coffee"
+	"github.com/gin-gonic/gin"
+
 	"github.com/RainrainWu/probe/pkg/test_salad"
 	"github.com/RainrainWu/probe/pkg/utils"
 )
 
+const (
+	SERVICE_PORT	= "2023"
+)
+
 func main() {
 
-	coffee_runner := utils.Runner{
-		Series: 	test_coffee.Cases,
-		LogLevel: 	1,
-	}
-	coffee_runner.Init()
-	go coffee_runner.Start()
+	server := gin.Default()
+	server.POST("/test", func(c *gin.Context) {
 
-	salad_runner := utils.Runner{
-		Series: 	test_salad.Cases,
-		LogLevel:	1,
-	}
-	salad_runner.Init()
-	go salad_runner.Start()
+		var meta utils.Metadata
+		err := c.BindJSON(&meta)
+		if (err != nil) {
+			fmt.Println(err)
+		}
 
-	show(salad_runner)
+		salad_runner := utils.Runner{
+			Series: 	test_salad.Cases,
+			LogLevel:	1,
+		}
+		salad_runner.Init()
+		salad_runner.Rep.SetMeta(meta)
+		go salad_runner.Start()
+		show(salad_runner)
+		c.JSON(200, []string{"123", "321"})
+	})
+	server.Run("localhost:" + SERVICE_PORT)
 }
 
 func show(runner utils.Runner) {

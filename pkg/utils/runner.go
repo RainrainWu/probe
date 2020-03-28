@@ -3,6 +3,7 @@ package utils
 import (
 	"fmt"
 	"sync"
+	"encoding/json"
 )
 
 const (
@@ -13,6 +14,7 @@ type Runner struct {
 	Series		[]func(*Runner) int
 	Logger 		chan string
 	LogLevel	int
+	Rep			*Report
 	group		*sync.WaitGroup
 }
 
@@ -23,28 +25,29 @@ func (r *Runner) Wrap(item func(*Runner) int) func(*sync.WaitGroup) int {
 	}
 }
 
-func (r *Runner) CaseFactory(series []func(*Runner) int) []func(*sync.WaitGroup) int {
+func (r *Runner) Init() {
+
+	r.Logger = make(chan string)
+	r.Rep = new(Report)
+	r.group = new(sync.WaitGroup)
+}
+
+func (r *Runner) Start() {
+
+	for _, test := range r.WrapAll(r.Series) {
+		r.group.Add(1)
+		go test(r.group)
+	}
+	r.group.Wait()
+}
+
+func (r *Runner) WrapAll(series []func(*Runner) int) []func(*sync.WaitGroup) int {
 	
 	var _series []func(*sync.WaitGroup) int
 	for _, item := range series {
 		_series = append(_series, r.Wrap(item))
 	}
 	return _series
-}
-
-func (r *Runner) Init() {
-
-	r.Logger = make(chan string)
-	r.group = new(sync.WaitGroup)
-}
-
-func (r *Runner) Start() {
-
-	for _, test := range r.CaseFactory(r.Series) {
-		r.group.Add(1)
-		go test(r.group)
-	}
-	r.group.Wait()
 }
 
 func (r *Runner) Debug(msg string) {
@@ -67,4 +70,9 @@ func (r *Runner) Warning(msg string) {
 
 func (r *Runner) Error(msg string) {
 	r.Logger <- fmt.Sprintf(LOG_FORMAT, "ERROR", msg)
+}
+
+func (r *Runner) Dump() {
+	report, _ := json.MarshalIndent(r.Rep, "", "  ")
+	r.Logger <- string(report)
 }
