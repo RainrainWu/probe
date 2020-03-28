@@ -23,7 +23,7 @@ func (r *Runner) Wrap(item func(*Runner) int) func(*sync.WaitGroup) int {
 	}
 }
 
-func (r *Runner) CaseFactory(series []func(*Runner) int) []func(*sync.WaitGroup) int {
+func (r *Runner) WrapAll(series []func(*Runner) int) []func(*sync.WaitGroup) int {
 	
 	var _series []func(*sync.WaitGroup) int
 	for _, item := range series {
@@ -40,7 +40,7 @@ func (r *Runner) Init() {
 
 func (r *Runner) Start() {
 
-	for _, test := range r.CaseFactory(r.Series) {
+	for _, test := range r.WrapAll(r.Series) {
 		r.group.Add(1)
 		go test(r.group)
 	}
