@@ -7,26 +7,19 @@ import (
 var Cases []func(*utils.Runner) int = []func(*utils.Runner) int {
 	Americano,
 	Espresso,
-	IceDripCoffee,
-	Latte,
 }
 
 func Americano(r *utils.Runner) int {
-	r.Debug("Make americano")
+	r.Info("Start making americano")
+	r.Debug("Prepare hot water")
+	r.Info("Finish making americano")
 	return 0
 }
 
 func Espresso(r *utils.Runner) int {
-	r.Debug("Make espresso")
-	return 0
-}
-
-func IceDripCoffee(r *utils.Runner) int {
-	r.Debug("Make ice drip coffee")
-	return 0
-}
-
-func Latte(r *utils.Runner) int {
-	r.Debug("Make latte")
+	r.Info("Start making espresso")
+	r.Debug("Prepare hot water")
+	r.Warning("Hot water is not hot enough")
+	r.Info("Finish making espresso")
 	return 0
 }
