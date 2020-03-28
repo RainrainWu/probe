@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"sync"
 	"encoding/json"
+
+	"github.com/gorilla/websocket"
 )
 
 const (
@@ -15,6 +17,7 @@ type Runner struct {
 	Logger 		chan string
 	LogLevel	int
 	Rep			*Report
+	Websocket	*websocket.Conn
 	group		*sync.WaitGroup
 }
 
@@ -38,7 +41,23 @@ func (r *Runner) Start() {
 		r.group.Add(1)
 		go test(r.group)
 	}
+	r.group.Add(1)
+	go r.Send()
 	r.group.Wait()
+}
+
+func (r *Runner) Send() {
+	for {
+		select {
+		case msg :=  <- r.Logger:
+			if msg == "finish" {
+				return
+			} else {
+				r.Websocket.WriteMessage(websocket.TextMessage, []byte(msg))
+			}
+		default:
+		}
+	}
 }
 
 func (r *Runner) WrapAll(series []func(*Runner) int) []func(*sync.WaitGroup) int {
@@ -75,4 +94,5 @@ func (r *Runner) Error(msg string) {
 func (r *Runner) Dump() {
 	report, _ := json.MarshalIndent(r.Rep, "", "  ")
 	r.Logger <- string(report)
+	r.Logger <- "finish"
 }
