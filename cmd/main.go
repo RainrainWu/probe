@@ -11,13 +11,15 @@ import (
 func main() {
 
 	coffee_runner := utils.Runner{
-		Series: test_coffee.Cases,
+		Series: 	test_coffee.Cases,
+		LogLevel: 	1,
 	}
 	coffee_runner.Init()
 	go coffee_runner.Start()
 
 	salad_runner := utils.Runner{
-		Series: test_salad.Cases,
+		Series: 	test_salad.Cases,
+		LogLevel:	1,
 	}
 	salad_runner.Init()
 	go salad_runner.Start()
