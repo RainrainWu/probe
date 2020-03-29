@@ -10,16 +10,14 @@ var Cases []func(*utils.Runner) int = []func(*utils.Runner) int {
 }
 
 func Cobb(r *utils.Runner) int {
-	r.Info("Start making Cobb")
-	r.Info("Finish making Cobb")
+	r.Rep.Pass()
 	return 0
 }
 
 func Caesar(r *utils.Runner) int {
-	r.Info("Start making Caesar")
-	r.Debug("Add topping")
-	r.Error("Topping not found")
-	r.Info("Finish making Caesar")
-	r.Dump()
+	dets := r.Rep.InitDetail("Caesar")
+	dets.Append("Topping", "topping not found")
+	dets.Append("Plate", "Plate is broken")
+	r.Rep.Fail()
 	return 0
 }
