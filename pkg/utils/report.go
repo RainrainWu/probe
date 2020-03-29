@@ -1,10 +1,10 @@
 package utils
 
 type Metadata struct {
-	Id			string	`json:"id"`
-	Env			string	`json:"env"`
-	Tester		string	`json:"tester"`
-	Subject		string	`json:"subject"`
+	Index		string
+	Env			string
+	Tester		string
+	Subject		string
 }
 
 type Statistic struct {
@@ -19,14 +19,20 @@ type Detail struct {
 }
 
 type Report struct {
-	Meta	Metadata			`json:"meta"`
-	Stat	Statistic			`json:"stat"`
-	Dets	map[string]Detail	`json:"dets"`
+	Index   string
+	Meta	Metadata
+	Stat	Statistic
+	Dets	map[string]Detail
+}
+
+type Filter struct {
+	Index	string
 }
 
 func (r *Report) SetMeta(data Metadata) {
 	r.Meta = data
 	r.Dets = make(map[string]Detail)
+	r.Index = r.Meta.Index
 }
 
 func (r *Report) InitDetail(name string) Detail {
@@ -54,34 +60,3 @@ func (r *Report) Fail() {
 	r.Stat.Total += 1
 	r.Stat.Fail += 1
 }
-
-/*
-func main() {
-	me := Metadata{
-		Id: "001",
-		Time: "002",
-		Env: "dev",
-		Tester: "CI",
-		Subject: "none",
-	}
-	st := Statistic{
-		Total: 		3,
-		Pass:		1,
-		Warning:	1,
-		Fail:		1,
-	}
-	de := Detail{
-		Name:		"Auth",
-		Content:	map[string]string{
-			"token": "123456",
-			"code": "200",
-		},
-	}
-	re := &Report{
-		Meta:	me,
-		Stat:	st,
-		Dets:	[]Detail{de},
-	}
-	fmt.Println(re.Marshal())
-}
-*/
