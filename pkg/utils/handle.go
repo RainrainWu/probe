@@ -6,6 +6,7 @@ import (
 
 func HandleErr(err error, msg string) {
 	if err != nil {
-		log.Fatal(msg)
+		log.Println(msg)
+		log.Fatal(err)
 	}
 }

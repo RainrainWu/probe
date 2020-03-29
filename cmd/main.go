@@ -28,12 +28,28 @@ func testHandler(ctx *gin.Context) {
 	salad_runner.Init()
 	salad_runner.Rep.SetMeta(meta)
 	go salad_runner.Run()
-	ctx.Data(200, "plain/text", []byte(<- salad_runner.Result))
+	
+	result := <- salad_runner.Result
+	utils.WriteReport(*salad_runner.Rep)
+	ctx.Data(200, "plain/text", []byte(result))
+}
+
+func reportHandler(ctx *gin.Context) {
+
+	var filter utils.Filter
+	err := ctx.BindJSON(&filter)
+	utils.HandleErr(err, "Failed to bind json data")
+
+	result := utils.ReadReport(filter.Index)
+	ctx.Data(200, "plain/text", []byte(result))
 }
 
 func main() {
 
+	utils.ConnectDB()
+
 	server := gin.Default()
 	server.POST("/test", testHandler)
+	server.GET("/report", reportHandler)
 	server.Run("localhost:" + SERVICE_PORT)
 }

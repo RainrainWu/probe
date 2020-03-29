@@ -1,12 +1,10 @@
-package main
+package utils
 
 import (
-	"fmt"
-	"log"
 	"context"
+	"encoding/json"
 
-	"github.com/RainrainWu/probe/pkg/utils"
-
+    "go.mongodb.org/mongo-driver/bson"
     "go.mongodb.org/mongo-driver/mongo"
     "go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -16,29 +14,31 @@ var (
 	ReportColl	*mongo.Collection
 )
 
-type Trainer struct {
-    Name string
-    Age  int
-    City string
-}
-
-func Connect
-
-func main() {
+func ConnectDB() {
 	
 	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
 	Client, err := mongo.Connect(context.TODO(), clientOptions)
-	utils.HandleErr(err, "Failed to connect with mongodb")
-	
-	err = client.Ping(context.TODO(), nil)
-	utils.HandleErr(err, "No response heard from mongodb")
+	HandleErr(err, "Failed to connect with mongodb")
 
-	ReportColl := client.Database("test").Collection("rain")
+	err = Client.Ping(context.TODO(), nil)
+	HandleErr(err, "No response heard from mongodb")
+
+	ReportColl = Client.Database("test").Collection("rain")
 }
 
-func CreateReport(doc interface{}) {
+func WriteReport(doc interface{}) {
 	
-	result, err := ReportColl.InsertOne(context.TODO(), doc)
-	HandleErr(err)
-	fmt.Println("Inserted doc: ", result)
+	_, err := ReportColl.InsertOne(context.TODO(), doc)
+	HandleErr(err, "Failed to write report")
+}
+
+func ReadReport(id string) string {
+
+	var result Report
+	filter := bson.D{{"index", id}}
+	err := ReportColl.FindOne(context.TODO(), filter).Decode(&result)
+	HandleErr(err, "Failed to read report")
+	
+	data, _ := json.MarshalIndent(result, "", "  ")
+	return string(data)
 }
