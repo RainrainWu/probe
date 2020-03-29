@@ -13,37 +13,27 @@ const (
 	SERVICE_PORT	= "2023"
 )
 
+func testHandler(ctx *gin.Context) {
+
+	var meta utils.Metadata
+	err := ctx.BindJSON(&meta)
+	if (err != nil) {
+		fmt.Println(err)
+		return
+	}
+
+	salad_runner := utils.Runner{
+		Series: 	test_salad.Cases,
+	}
+	salad_runner.Init()
+	salad_runner.Rep.SetMeta(meta)
+	go salad_runner.Run()
+	ctx.Data(200, "plain/text", []byte(<- salad_runner.Result))
+}
+
 func main() {
 
 	server := gin.Default()
-	server.POST("/test", func(c *gin.Context) {
-
-		var meta utils.Metadata
-		err := c.BindJSON(&meta)
-		if (err != nil) {
-			fmt.Println(err)
-		}
-
-		salad_runner := utils.Runner{
-			Series: 	test_salad.Cases,
-			LogLevel:	1,
-		}
-		salad_runner.Init()
-		salad_runner.Rep.SetMeta(meta)
-		go salad_runner.Start()
-		show(salad_runner)
-		c.JSON(200, []string{"123", "321"})
-	})
+	server.POST("/test", testHandler)
 	server.Run("localhost:" + SERVICE_PORT)
-}
-
-func show(runner utils.Runner) {
-
-	for {
-		select {
-		case msg := <- runner.Logger:
-			fmt.Println(msg)
-		default:
-		}
-	}
 }

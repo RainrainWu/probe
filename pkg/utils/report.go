@@ -15,36 +15,44 @@ type Statistic struct {
 }
 
 type Detail struct {
-	Name	string
 	Content	map[string]string
 }
 
 type Report struct {
-	Meta	Metadata	`json:"meta"`
-	Stat	Statistic	`json:"stat"`
-	Dets	[]Detail	`json:"dets"`
+	Meta	Metadata			`json:"meta"`
+	Stat	Statistic			`json:"stat"`
+	Dets	map[string]Detail	`json:"dets"`
 }
 
 func (r *Report) SetMeta(data Metadata) {
 	r.Meta = data
+	r.Dets = make(map[string]Detail)
 }
 
-func (r *Report) Pass(detail Detail) {
+func (r *Report) InitDetail(name string) Detail {
+	r.Dets[name] = Detail{
+		Content: make(map[string]string),
+	}
+	return r.Dets[name]
+}
+
+func (d *Detail) Append(key, value string) {
+	d.Content[key] = value
+}
+
+func (r *Report) Pass() {
 	r.Stat.Total += 1
 	r.Stat.Pass += 1
-	r.Dets = append(r.Dets, detail)
 }
 
-func (r *Report) Warning(detail Detail) {
+func (r *Report) Warning() {
 	r.Stat.Total += 1
 	r.Stat.Warning += 1
-	r.Dets = append(r.Dets, detail)
 }
 
-func (r *Report) Fail(detail Detail) {
+func (r *Report) Fail() {
 	r.Stat.Total += 1
 	r.Stat.Fail += 1
-	r.Dets = append(r.Dets, detail)
 }
 
 /*
