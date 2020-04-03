@@ -14,7 +14,11 @@ var (
 	ReportColl	*mongo.Collection
 )
 
-func ConnectDB() {
+func init() {
+	connectDB()
+}
+
+func connectDB() {
 	
 	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
 	Client, err := mongo.Connect(context.TODO(), clientOptions)

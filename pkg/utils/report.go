@@ -4,6 +4,7 @@ type Metadata struct {
 	Index		string
 	Env			string
 	Tester		string
+	Topic		[]string
 	Subject		string
 }
 
