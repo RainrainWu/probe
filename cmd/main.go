@@ -7,10 +7,7 @@ import (
 
 	"github.com/RainrainWu/probe/pkg/jobs"
 	"github.com/RainrainWu/probe/pkg/utils"
-)
-
-const (
-	SERVICE_PORT string	= "2023"
+	"github.com/RainrainWu/probe/pkg/config"
 )
 
 func testHandler(ctx *gin.Context) {
@@ -41,5 +38,5 @@ func main() {
 	server := gin.Default()
 	server.POST("/test", testHandler)
 	server.GET("/report", reportHandler)
-	server.Run("localhost:" + SERVICE_PORT)
+	server.Run("localhost:" + config.SERVICE_PORT)
 }
