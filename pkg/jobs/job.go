@@ -1,8 +1,6 @@
-package main
+package jobs
 
 import (
-	"fmt"
-
 	"github.com/RainrainWu/probe/pkg/utils"
 	"github.com/RainrainWu/probe/pkg/tests"
 )
@@ -51,15 +49,4 @@ func RunJob(meta utils.Metadata) string {
 	utils.WriteReport(*runner.Rep)
 	remandFlag()
 	return result
-}
-
-func main() {
-	s_meta := utils.Metadata{
-		Topic: []string{"salad"},
-	}
-	c_meta := utils.Metadata{
-		Topic: []string{"coffee"},
-	}
-	fmt.Println(RunJob(s_meta))
-	fmt.Println(RunJob(c_meta))
 }
