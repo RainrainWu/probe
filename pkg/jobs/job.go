@@ -3,10 +3,7 @@ package jobs
 import (
 	"github.com/RainrainWu/probe/pkg/utils"
 	"github.com/RainrainWu/probe/pkg/tests"
-)
-
-const (
-	FLAG_NUMBER	int	= 1
+	"github.com/RainrainWu/probe/pkg/config"
 )
 
 var (
@@ -14,21 +11,21 @@ var (
 		"salad": 	tests.SaladCase,
 		"coffee": 	tests.CoffeeCase,
 	}
-	flags	chan int = make(chan int, FLAG_NUMBER)
+	quota	chan int = make(chan int, config.WORKER_QUOTA)
 )
 
 func init() {
-	for i := 0; i < cap(flags); i++ {
+	for i := 0; i < cap(quota); i++ {
 		remandFlag()
 	}
 }
 
 func fetchFlag() int {
-	return <- flags
+	return <- quota
 }
 
 func remandFlag() {
-	flags <- 1
+	quota <- 1
 }
 
 func RunJob(meta utils.Metadata) string {
