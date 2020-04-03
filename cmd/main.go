@@ -5,12 +5,12 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/RainrainWu/probe/pkg/test_salad"
+	"github.com/RainrainWu/probe/pkg/tests"
 	"github.com/RainrainWu/probe/pkg/utils"
 )
 
 const (
-	SERVICE_PORT	= "2023"
+	SERVICE_PORT string	= "2023"
 )
 
 func testHandler(ctx *gin.Context) {
@@ -23,7 +23,7 @@ func testHandler(ctx *gin.Context) {
 	}
 
 	salad_runner := utils.Runner{
-		Series: 	test_salad.Cases,
+		Series: 	tests.SaladCase,
 	}
 	salad_runner.Init()
 	salad_runner.Rep.SetMeta(meta)
@@ -45,8 +45,6 @@ func reportHandler(ctx *gin.Context) {
 }
 
 func main() {
-
-	utils.ConnectDB()
 
 	server := gin.Default()
 	server.POST("/test", testHandler)
