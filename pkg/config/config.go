@@ -2,6 +2,7 @@ package config
 
 import (
 	"os"
+	"log"
 	"strconv"
 
 	"github.com/joho/godotenv"
@@ -13,14 +14,17 @@ var  (
 	SERVICE_PORT string	= getenv("SERVICE_PORT", "2023")
 
 	// job worker
-	WORKER_QUOTA int
+	WORKER_QUOTA int = strToInt(getenv("WORKER_QOUTA", "3"))
+
+	// jwt auth
+	JWT_SECRET string = getenv("JWT_SECRET", "mysecret")
+	USERNAME string = getenv("USERNAME", "probeuser")
+	PASSWORD string = getenv("PASSWORD", "probepass")
 )
 
 func init() {
 
 	godotenv.Load()
-
-	WORKER_QUOTA, _ = strconv.Atoi(getenv("WORKER_QUOTA", "3"))
 }
 
 func getenv(key, fallback string) string {
@@ -29,4 +33,12 @@ func getenv(key, fallback string) string {
         return fallback
     }
     return value
+}
+
+func strToInt(source string) int {
+	result, err := strconv.Atoi(source)
+	if err != nil {
+		log.Fatal("Error when parse " + source + " to int")
+	}
+	return result
 }

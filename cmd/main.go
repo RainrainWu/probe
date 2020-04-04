@@ -10,6 +10,7 @@ import (
 	"github.com/RainrainWu/probe/pkg/config"
 )
 
+// handle test executing
 func testHandler(ctx *gin.Context) {
 
 	var meta utils.Metadata
@@ -23,6 +24,7 @@ func testHandler(ctx *gin.Context) {
 	ctx.Data(200, "plain/text", []byte(result))
 }
 
+// handle report viewing
 func reportHandler(ctx *gin.Context) {
 
 	var filter utils.Filter
