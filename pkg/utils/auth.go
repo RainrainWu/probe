@@ -79,7 +79,11 @@ func CheckToken(token string) *Claims {
 			}
 			fmt.Println(message)
 		}
-		return nil
+		return 
+		
+
+
+		
 	}
 
 	if claims, ok := tokenClaims.Claims.(*Claims); ok && tokenClaims.Valid {
