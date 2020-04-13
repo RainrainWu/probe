@@ -1,4 +1,4 @@
-package main
+package utils
 
 import (
 	"fmt"
@@ -9,13 +9,14 @@ import (
 	"github.com/RainrainWu/probe/pkg/config"
 )
 
-type UserData struct {
-	username string	`json:"username"`
-	password string	`json:"password"`
+type userData struct {
+	Username string	`json:"username"`
+	Password string	`json:"password"`
 }
 
 type Claims struct {
-	role string		`json:"role"`
+	User string		`json:"user"`
+	Role string		`json:"role"`
 	jwt.StandardClaims
 }
 
@@ -23,23 +24,35 @@ var (
 	jwtSecret = []byte(config.JWT_SECRET)
 )
 
-func CheckUser(user UserData) bool {
+func NewUser() *userData {
+	
+	return &userData{}
+}
+
+func (user *userData) ShowUser() {
+
+	fmt.Println(user.Username)
+	fmt.Println(user.Password)
+}
+
+func (user *userData) CheckUser() bool {
 	
 	// user check
-	u_check := user.username == config.USERNAME
-	p_check := user.password == config.PASSWORD
+	u_check := user.Username == config.USERNAME
+	p_check := user.Password == config.PASSWORD
 	if u_check && p_check {
 		return true
 	}
 	return false
 }
 
-func GenToken(user UserData) string {
+func (user *userData) GenToken() string {
 
 	// generate jwt
 	now := time.Now()
 	claims := Claims{
-		role:           "Tester",
+		User:			user.Username,
+		Role:           "Tester",
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: now.Add(20 * time.Second).Unix(),
 			IssuedAt:  now.Unix(),
@@ -56,11 +69,12 @@ func GenToken(user UserData) string {
 	return token
 }
 
-func CheckToken(token string) *Claims {
+func ValidateToken(token string) (string, *jwt.Token) {
 
 	tokenClaims, err := jwt.ParseWithClaims(token, &Claims{}, func(token *jwt.Token) (i interface{}, err error) {
 		return jwtSecret, nil
 	})
+
 	if err != nil {
 		var message string
 		if ve, ok := err.(*jwt.ValidationError); ok {
@@ -77,22 +91,9 @@ func CheckToken(token string) *Claims {
 			} else {
 				message = "can not handle this token"
 			}
-			fmt.Println(message)
 		}
-		return 
-		
-
-
-		
+		return message, nil
+	} else {
+		return "", tokenClaims
 	}
-
-	if claims, ok := tokenClaims.Claims.(*Claims); ok && tokenClaims.Valid {
-		fmt.Println("role:", claims.role)
-		return claims
-	}
-	return nil
-}
-
-func main() {
-
 }
