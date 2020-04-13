@@ -52,9 +52,9 @@ func (user *userData) GenToken() string {
 	now := time.Now()
 	claims := Claims{
 		User:			user.Username,
-		Role:           "Tester",
+		Role:           "UDC Tester",
 		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: now.Add(20 * time.Second).Unix(),
+			ExpiresAt: now.Add(300 * time.Second).Unix(),
 			IssuedAt:  now.Unix(),
 			Issuer:    "ginJWT",
 		},

@@ -50,8 +50,6 @@ func AuthRequired(ctx *gin.Context) {
 	}
 
 	if claims, ok := tokenClaims.Claims.(*utils.Claims); ok && tokenClaims.Valid {
-		fmt.Println("user:", claims.User)
-		fmt.Println("role:", claims.Role)
 		ctx.Set("user", claims.User)
 		ctx.Set("role", claims.Role)
 		ctx.Next()
@@ -64,12 +62,20 @@ func AuthRequired(ctx *gin.Context) {
 func fooHandler(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, gin.H{
-		"token": ctx.GetHeader("token"),
+		"token": ctx.GetHeader("Authorization"),
 	})
 }
 
 // handle test executing
 func testHandler(ctx *gin.Context) {
+
+	role, _ := ctx.Get("role")
+	if role != "UDC Tester" {
+		ctx.JSON(http.StatusUnauthorized, gin.H{
+			"error": "Unauthorized",
+		})
+		return
+	}
 
 	var meta utils.Metadata
 	err := ctx.BindJSON(&meta)
@@ -85,6 +91,14 @@ func testHandler(ctx *gin.Context) {
 // handle report viewing
 func reportHandler(ctx *gin.Context) {
 
+	role, _ := ctx.Get("role")
+	if role != "UDC Tester" {
+		ctx.JSON(http.StatusUnauthorized, gin.H{
+			"error": "Unauthorized",
+		})
+		return
+	}
+
 	var filter utils.Filter
 	err := ctx.BindJSON(&filter)
 	utils.HandleErr(err, "Failed to bind json data")
@@ -97,14 +111,14 @@ func main() {
 
 	server := gin.Default()
 	server.POST("/login", loginHandler)
-	server.POST("/test", testHandler)
-	server.GET("/report", reportHandler)
 
 	// Auth required endpoint
 	authorized := server.Group("/")
 	authorized.Use(AuthRequired)
 	{
 		authorized.GET("/foo", fooHandler)
+		authorized.POST("/test", testHandler)
+		authorized.GET("/report", reportHandler)
 	}
 
 	server.Run("localhost:" + config.SERVICE_PORT)
