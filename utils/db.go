@@ -36,6 +36,16 @@ func WriteReport(doc interface{}) {
 	HandleErr(err, "Failed to write report")
 }
 
+func ReadReportRaw(id string) Report {
+
+	var result Report
+	filter := bson.D{{"index", id}}
+	err := ReportColl.FindOne(context.TODO(), filter).Decode(&result)
+	HandleErr(err, "Failed to read report")
+
+	return result
+}
+
 func ReadReport(id string) string {
 
 	var result Report

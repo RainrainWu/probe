@@ -91,6 +91,18 @@ func testHandler(ctx *gin.Context) {
 // handle report viewing
 func reportHandler(ctx *gin.Context) {
 
+	var filter utils.Filter
+	err := ctx.BindJSON(&filter)
+	utils.HandleErr(err, "Failed to bind json data")
+
+	result := utils.ReadReportRaw(filter.Index)
+	text, _ := utils.Render(result)
+	ctx.Data(200, "plain/text", []byte(text))
+}
+
+// handle metrix response
+func metrixHandler(ctx *gin.Context) {
+
 	role, _ := ctx.Get("role")
 	if role != "UDC Tester" {
 		ctx.JSON(http.StatusUnauthorized, gin.H{
@@ -111,6 +123,8 @@ func Start() {
 
 	server := gin.Default()
 	server.POST("/login", loginHandler)
+	server.GET("/report", reportHandler)
+	server.GET("/report/metrix", metrixHandler)
 
 	// Auth required endpoint
 	authorized := server.Group("/")
@@ -118,7 +132,6 @@ func Start() {
 	{
 		authorized.GET("/foo", fooHandler)
 		authorized.POST("/test", testHandler)
-		authorized.GET("/report", reportHandler)
 	}
 
 	server.Run("localhost:" + config.SERVICE_PORT)
