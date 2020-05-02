@@ -93,7 +93,10 @@ func reportHandler(ctx *gin.Context) {
 
 	var filter utils.Filter
 	err := ctx.BindJSON(&filter)
-	utils.HandleErr(err, "Failed to bind json data")
+	if err != nil {
+		utils.Logger.Warn("Failed to bind json data")
+		ctx.Data(400, "plain/text", []byte("Unacceptable json structure"))
+	}
 
 	result := utils.ReadReportRaw(filter.Index)
 	text, _ := utils.Render(result)
@@ -113,7 +116,10 @@ func metrixHandler(ctx *gin.Context) {
 
 	var filter utils.Filter
 	err := ctx.BindJSON(&filter)
-	utils.HandleErr(err, "Failed to bind json data")
+	if err != nil {
+		utils.Logger.Warn("Failed to bind json data")
+		ctx.Data(400, "plain/text", []byte("Unacceptable json structure"))
+	}
 
 	result := utils.ReadReport(filter.Index)
 	ctx.Data(200, "plain/text", []byte(result))

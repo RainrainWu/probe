@@ -4,6 +4,8 @@ import (
 
 	"errors"
 
+	"go.uber.org/zap"
+
 	"github.com/RainrainWu/probe/utils"
 	"github.com/RainrainWu/probe/config"
 )
@@ -50,6 +52,13 @@ func RunJob(meta utils.Metadata) string {
 	}
 	runner.Init()
 	runner.Rep.SetMeta(meta)
+	utils.Logger.Info("Start running jobs",
+		zap.String("Index", meta.Index),
+		zap.String("Env", meta.Env),
+		zap.String("Tester", meta.Tester),
+		zap.Any("Topic", meta.Topic),
+		zap.String("Subject", meta.Subject),
+	)
 	go runner.Run()
 
 	result := <- runner.Result
