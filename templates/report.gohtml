@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+    <title>{{.Index}}</title>
+</head>
+<body>
+    <div>
+        <h1>Metadata</h1>
+        <p><b>Index: </b> {{.Meta.Index}} </p>
+        <p><b>Env: </b> {{.Meta.Env}} </p>
+        <p><b>Tester: </b> {{.Meta.Tester}} </p>
+        <p><b>Topic: </b> {{.Meta.Topic}} </p>
+        <p><b>Subject: </b> {{.Meta.Subject}} </p>
+    </div>
+    <br/>
+    <div>
+        <h1>Statistic</h1>
+        <p><b>Total: </b> {{.Stat.Total}} </p>
+        <p><b>Pass: </b> {{.Stat.Pass}} </p>
+        <p><b>Warning: </b> {{.Stat.Warning}} </p>
+        <p><b>Fail: </b> {{.Stat.Fail}} </p>
+    </div>
+    <br/>
+    <div>
+        <h1>Details</h1>
+        {{ range $case, $detail := .Dets }}
+        <h2> Case: {{ $case }} </h2>
+            {{ range $key, $value := $detail.Content }}
+            <p><b> {{ $key }}: </b> {{ $value }} </p>
+            {{ end }}
+        <br/>
+        {{ end }}
+    </div>
+</body>
+</html>
