@@ -1,7 +1,7 @@
-package tests
+package example_cases
 
 import (
-	"github.com/RainrainWu/probe/pkg/utils"
+	"github.com/RainrainWu/probe/utils"
 )
 
 var CoffeeCase []func(*utils.Runner) int = []func(*utils.Runner) int {

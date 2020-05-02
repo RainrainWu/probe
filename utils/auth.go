@@ -6,7 +6,7 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 
-	"github.com/RainrainWu/probe/pkg/config"
+	"github.com/RainrainWu/probe/config"
 )
 
 type userData struct {
