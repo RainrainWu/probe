@@ -10,7 +10,7 @@ go get github.com/RainrainWu/probe
 # Get Started
 ## Test case
 - Test case shoud contains a parameter `*jobs.Runner` for collecting information during executing.
-```go=
+```go
 func SaladCaesar(r *jobs.Runner) {
 	dets := r.Rep.InitDetail("Caesar")
 	dets.Append("Topping", "topping not found")
@@ -19,7 +19,7 @@ func SaladCaesar(r *jobs.Runner) {
 }
 ```
 - Then group all cases with same topic within a slice
-```go=
+```go
 var SaladCase []func(*jobs.Runner) = []func(*jobs.Runner) {
 	SaladCobb,
 	SaladCaesar,
@@ -29,7 +29,7 @@ var SaladCase []func(*jobs.Runner) = []func(*jobs.Runner) {
 
 ## Running server
 - Remember add your customized cases before starting probe.
-```go=
+```go
 package main
 
 import (
