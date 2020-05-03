@@ -8,7 +8,7 @@ import (
 )
 
 type Runner struct {
-	Series		[]func(*Runner) int
+	Series		[]func(*Runner)
 	Rep			*utils.Report
 	Result		chan string
 	group		*sync.WaitGroup
@@ -33,16 +33,16 @@ func (r *Runner) Run() {
 	r.Result <- string(report)
 }
 
-func (r *Runner) Wrap(item func(*Runner) int) func(*sync.WaitGroup) int {
-	return func(wg *sync.WaitGroup) int {
+func (r *Runner) Wrap(item func(*Runner)) func(*sync.WaitGroup) {
+	return func(wg *sync.WaitGroup) {
 		defer wg.Done()
-		return item(r)
+		item(r)
 	}
 }
 
-func (r *Runner) WrapAll(series []func(*Runner) int) []func(*sync.WaitGroup) int {
+func (r *Runner) WrapAll(series []func(*Runner)) []func(*sync.WaitGroup) {
 	
-	var _series []func(*sync.WaitGroup) int
+	var _series []func(*sync.WaitGroup)
 	for _, item := range series {
 		_series = append(_series, r.Wrap(item))
 	}

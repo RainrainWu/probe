@@ -4,20 +4,18 @@ import (
 	"github.com/RainrainWu/probe/jobs"
 )
 
-var SaladCase []func(*jobs.Runner) int = []func(*jobs.Runner) int {
+var SaladCase []func(*jobs.Runner) = []func(*jobs.Runner) {
 	SaladCobb,
 	SaladCaesar,
 }
 
-func SaladCobb(r *jobs.Runner) int {
+func SaladCobb(r *jobs.Runner) {
 	r.Rep.Pass()
-	return 0
 }
 
-func SaladCaesar(r *jobs.Runner) int {
+func SaladCaesar(r *jobs.Runner) {
 	dets := r.Rep.InitDetail("Caesar")
 	dets.Append("Topping", "topping not found")
 	dets.Append("Plate", "Plate is broken")
 	r.Rep.Fail()
-	return 0
 }
