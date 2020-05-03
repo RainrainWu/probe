@@ -20,6 +20,9 @@ var  (
 	JWT_SECRET string = getenv("JWT_SECRET", "mysecret")
 	USERNAME string = getenv("USERNAME", "probeuser")
 	PASSWORD string = getenv("PASSWORD", "probepass")
+
+	// zap logger
+	LOG_FILE string = getenv("LOG_FILE", "./logs/probe.log")
 )
 
 func init() {
