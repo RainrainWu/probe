@@ -105,14 +105,14 @@ func main() {
 
 ## Configration
 - Configs could be set via environment variables.
-    - SERVICE_PORT
-    probe service listening port.
-    - WORKER_QUOTA
-    maximum numbers of cocurrent workers toexecute test cases at the same time.
-    - USERNAME
-    login username for jwt token generating.
-    - PASSWORD
-    login password for jwt token generating.
+    - **SERVICE_PORT**
+        probe service listening port.
+    - **WORKER_QUOTA**
+        maximum numbers of cocurrent workers toexecute test cases at the same time.
+    - **USERNAME**
+        login username for jwt token generating.
+    - **PASSWORD**
+        login password for jwt token generating.
 
 
 # Contributors
