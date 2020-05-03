@@ -1,20 +1,20 @@
 package example_cases
 
 import (
-	"github.com/RainrainWu/probe/utils"
+	"github.com/RainrainWu/probe/jobs"
 )
 
-var SaladCase []func(*utils.Runner) int = []func(*utils.Runner) int {
+var SaladCase []func(*jobs.Runner) int = []func(*jobs.Runner) int {
 	SaladCobb,
 	SaladCaesar,
 }
 
-func SaladCobb(r *utils.Runner) int {
+func SaladCobb(r *jobs.Runner) int {
 	r.Rep.Pass()
 	return 0
 }
 
-func SaladCaesar(r *utils.Runner) int {
+func SaladCaesar(r *jobs.Runner) int {
 	dets := r.Rep.InitDetail("Caesar")
 	dets.Append("Topping", "topping not found")
 	dets.Append("Plate", "Plate is broken")

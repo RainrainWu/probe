@@ -11,7 +11,7 @@ import (
 )
 
 var (
-	catalog map[string]([]func(*utils.Runner) int) = make(map[string]([]func(*utils.Runner) int))
+	catalog map[string]([]func(*Runner) int) = make(map[string]([]func(*Runner) int))
 	quota	chan int = make(chan int, config.WORKER_QUOTA)
 )
 
@@ -29,7 +29,7 @@ func remandFlag() {
 	quota <- 1
 }
 
-func AddJob(subject string, content []func(*utils.Runner) int) error {
+func AddJob(subject string, content []func(*Runner) int) error {
 	if _, ok := catalog[subject]; ok {
 		return errors.New("Subject already exist in catalog.")
 	}
@@ -42,12 +42,12 @@ func AddJob(subject string, content []func(*utils.Runner) int) error {
 
 func RunJob(meta utils.Metadata) string {
 	fetchFlag()
-	var series []func(*utils.Runner) int
+	var series []func(*Runner) int
 	for _, topic := range meta.Topic {
 		series = append(series, catalog[topic]...)
 	}
 
-	runner := utils.Runner{
+	runner := Runner{
 		Series:	series,
 	}
 	runner.Init()

@@ -1,20 +1,22 @@
-package utils
+package jobs
 
 import (
 	"sync"
 	"encoding/json"
+
+	"github.com/RainrainWu/probe/utils"
 )
 
 type Runner struct {
 	Series		[]func(*Runner) int
-	Rep			*Report
+	Rep			*utils.Report
 	Result		chan string
 	group		*sync.WaitGroup
 }
 
 func (r *Runner) Init() {
 
-	r.Rep = new(Report)
+	r.Rep = new(utils.Report)
 	r.Result = make(chan string)
 	r.group = new(sync.WaitGroup)
 }
