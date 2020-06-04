@@ -62,7 +62,7 @@ func RunJob(meta utils.Metadata) string {
 	go runner.Run()
 
 	result := <- runner.Result
-	utils.WriteReport(*runner.Rep)
+	// utils.WriteReport(*runner.Rep)
 	remandFlag()
 	return result
 }

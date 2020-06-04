@@ -15,7 +15,7 @@ var (
 )
 
 func init() {
-	connectDB()
+	// connectDB()
 }
 
 func connectDB() {

@@ -60,49 +60,6 @@ func main() {
 % curl http://localhost:2023/test -X POST -H 'Content-Type: application/json' -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoicHJvYmV1c2VyIiwicm9sZSI6IlVEQyBUZXN0ZXIiLCJleHAiOjE1ODg0Nzc0ODcsImlhdCI6MTU4ODQ3NzE4NywiaXNzIjoiZ2luSldUIn0.ua-YmTuNWGKh8qGMBI1Du0-2qIVmxHtEw2UBZdCDuVs" -d '{"index":"0008","env":"prod","topic":["salad", "coffee"],"subject":"Daily integration test","tester":"CI Server"}'
 ```
 
-- For checking test record which have been execute in the past, use the `/report` or `/report/metrix` endpoints, these two can be access without login.
-```bash
-% curl http://localhost:2023/report/metrix -X GET -H 'Content-Type: application/json' -d '{"Index":"0008"}'
-
-{
-  "Index": "0008",
-  "Meta": {
-    "Index": "0008",
-    "Env": "prod",
-    "Tester": "CI Server",
-    "Topic": [
-      "salad",
-      "coffee"
-    ],
-    "Subject": "Daily integration test"
-  },
-  "Stat": {
-    "Total": 4,
-    "Pass": 2,
-    "Warning": 1,
-    "Fail": 1
-  },
-  "Dets": {
-    "Americano": {
-      "Content": {
-        "Hot Water": "95 degree celcius"
-      }
-    },
-    "Caesar": {
-      "Content": {
-        "Plate": "Plate is broken",
-        "Topping": "topping not found"
-      }
-    },
-    "Espresso": {
-      "Content": {
-        "Hot Water": "70 degree celcius, not hot enough"
-      }
-    }
-  }
-}%
-```
-
 ## Configration
 - Configs could be set via environment variables.
     - **SERVICE_PORT**

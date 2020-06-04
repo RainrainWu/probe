@@ -40,8 +40,8 @@ func Start() {
 
 	server := gin.Default()
 	server.POST("/login", handlers.LoginHandler)
-	server.GET("/report", handlers.ReportHandler)
-	server.GET("/report/metrix", handlers.MetrixHandler)
+	// server.GET("/report", handlers.ReportHandler)
+	// server.GET("/report/metrix", handlers.MetrixHandler)
 
 	// Auth required endpoint
 	authorized := server.Group("/")
