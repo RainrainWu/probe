@@ -50,14 +50,21 @@ func main() {
 ## Restful API endpoint
 - JWT is used to avoid test executed by unknown tester, login was needed before sensitive operations.
 ```bash
-% curl http://localhost:2023/login -X POST -H 'Content-Type: application/json' -d '{"username":"probeuser","password":"probepass"}'
+% curl http://localhost:2023/login \
+	-X POST \
+	-H 'Content-Type: application/json' \
+	-d '{"username":"probeuser","password":"probepass"}'
 
 {"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoicHJvYmV1c2VyIiwicm9sZSI6IlVEQyBUZXN0ZXIiLCJleHAiOjE1ODg0Nzc0ODcsImlhdCI6MTU4ODQ3NzE4NywiaXNzIjoiZ2luSldUIn0.ua-YmTuNWGKh8qGMBI1Du0-2qIVmxHtEw2UBZdCDuVs"}
 ```
 
 - Then trigger test via token you just obtain
 ```bash
-% curl http://localhost:2023/test -X POST -H 'Content-Type: application/json' -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoicHJvYmV1c2VyIiwicm9sZSI6IlVEQyBUZXN0ZXIiLCJleHAiOjE1ODg0Nzc0ODcsImlhdCI6MTU4ODQ3NzE4NywiaXNzIjoiZ2luSldUIn0.ua-YmTuNWGKh8qGMBI1Du0-2qIVmxHtEw2UBZdCDuVs" -d '{"index":"0008","env":"prod","topic":["salad", "coffee"],"subject":"Daily integration test","tester":"CI Server"}'
+% curl http://localhost:2023/test \
+	-X POST \
+	-H 'Content-Type: application/json' \
+	-H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoicHJvYmV1c2VyIiwicm9sZSI6IlVEQyBUZXN0ZXIiLCJleHAiOjE1ODg0Nzc0ODcsImlhdCI6MTU4ODQ3NzE4NywiaXNzIjoiZ2luSldUIn0.ua-YmTuNWGKh8qGMBI1Du0-2qIVmxHtEw2UBZdCDuVs" \
+	-d '{"index":"0008","env":"prod","topic":["salad", "coffee"],"subject":"Daily integration test","tester":"CI Server"}'
 ```
 
 ## Configration
